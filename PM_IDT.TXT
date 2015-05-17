@@ -1,0 +1,16 @@
+exc0	trap <exc_0>
+	exc1	trap <exc_1>
+        exc2    trap <exc_2>
+        exc3    trap <exc_3>
+        exc4    trap <exc_4>
+        exc5    trap <exc_5>
+        exc6    trap <exc_6>
+        exc7    trap <exc_7>
+        exc8    trap <exc_8>
+        exc9    trap <exc_9>
+        exc10   trap <exc_10>
+        exc11   trap <exc_11>
+        exc12   trap <exc_12>
+        exc13   trap <exc_13>
+	exc14	trap <exc_>
+trap 17 DUP (<exc_>)

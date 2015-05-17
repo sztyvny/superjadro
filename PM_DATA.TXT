@@ -1,0 +1,10 @@
+ tekst_x		DB 'OBS£UGA WYJATKU'
+atryb	 	DB 1Eh
+tekst_0 	DB 'OBSLUGA WYJATKU nr 0 (Dzielenie przez zero)'
+atryb_0		DB 1Eh
+tekst_1		DB 'OBS£UGA WYJATKU nr 1'
+atryb_1 	DB 1Eh
+tekst_10 	DB 'NIEDOPUSZCZALNY SEGMENT TSS'
+atryb_10 	DB 1Eh
+tekst13 	DB 'Ogolne naruszenie mechanizmu ochrony'
+atryb13 	DB 0FAh
