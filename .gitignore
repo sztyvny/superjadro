@@ -1,0 +1,10 @@
+#compilation
+*.obj
+*.exe
+
+#Latex
+*.pdf
+*.log
+*.aux
+*.gz
+*.toc
