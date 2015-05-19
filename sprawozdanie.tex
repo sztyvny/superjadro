@@ -1,0 +1,68 @@
+%TODO:
+%	-
+%	-
+\documentclass[a4paper,12pt]{article}
+
+
+% to jest do polskich znakow
+\usepackage[polish]{babel}
+\usepackage[T1]{polski}
+\usepackage[utf8]{inputenc} 
+
+%najpierw sa informacje o dokumencie
+\title{Architektura Komputerow - Projekt}
+\author{Rafał Pieniążek \and Hubert Zapała}
+\date{28 maja}
+
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents % to jest do spisu treści
+\newpage
+	
+	\section{Wstep}
+		\subsection{Założenia projektowe i rzeczywiste osiągnięcia}
+		W ramach projektu przygotowaliśmy podstawowe jądro systemu operacyjnego w trybie chronionym procesora. Jądro ma możliwość przełączania dwóch zadań za pomocą przerwań sprzętowych, pochodzących od klawiatury. Kod źródłowy jądra napisany jest w Turbo Assemblerze. Jądro to można uruchamiać w DOSBoxie, tak jak zwykły program, jednakże w ramach projektu zakupiliśmy stary komputer z procesorem Pentium III. Planowaliśmy uruchamiać system z dyskietki, ale nie poradziliśmy sobie z połączeniem jądra i bootloadera. Dlatego też jądro uruchamialiśmy z poziomu FreeDosa, bez  wyższych sterowników grafiki. Kolejnymi etapami prac było:
+			\begin{itemize}
+				\item{instalacja środowiska}
+				\item{kod przejścia procesora w tryb chroniony}
+				\item{obsługa przerwań i wyjątków}
+				\item{wykorzystanie pamieci rozszerzonej } (Aktywacja linii A20)
+				\item{przełączanie zadań przez furtkę zadania }	
+				\item{przełączanie zadań przez przerwania sprzętowe }	
+			\end{itemize}
+	\subsection{Wyjaśnienie pojęć}
+		\begin{itemize}
+				\item{deskryptor,tablice deskryptorów}
+				\item{selektor}
+				\item{przerwanie}
+				%TUTAJ TRZEBA DOPISAĆ KILKA RZECZY, MOZE COS O ARCHITEKTURZE?
+				%zadanie
+				%TSS
+			\end{itemize}
+	
+	
+	
+	\subsection{Tryb chroniony}
+	Procesory z rodziny x86  posiadają dodatkowy tryb , zwany trybem chronionym. Jest on szczególnie pomocny, podczas przełączania zadań. Podczas, gdy zadanie modyfikuje pewien obszar pamięci, musi być pewne, że wszystkie pozostałe zadania mają zablokowany dostęp do jego pamięci. W trybie chronionym ten problem został rozwiązany. Wszystkie zadania są w nim od siebie odseparowane, ponieważ dostęp do pamięci jest kontrolowany przez procesor. 
+
+	\subsection{Przejście w tryb chroniony}
+	Po włączeniu zasilania procesor jest w trybie rzeczywistym. Przejście w tryb chroniony odbywa się programowo, poprzez wykonanie pewnych instrukcji. Najpierw jednak należy zdefiniować strukturę - globalną tablicę deskryptorów - GDT.  Następnie należy ustawić bit PE(zezwolenie na tryb chroniony). Instrukcja LMSW pozwala nam pobrać całe słowo stanu procesora -  MSW. Po modyfikacji flagi, używamy WMSW, aby zapisać zmodyfikowane dane.
+	
+	\section{Jądro systemu w trybie chronionym}
+	
+	Podstawową funkcją jądra systemu operacyjnego jest możliwość przełączania zadań. Zadanie, jest to wykonywany program, lub niezależny jego fragment. Podczas przełączania zadań wykorzystywane są :
+	\begin{itemize}
+	\item{segment stanu zadania - TSS}
+	\item{deskryptor segmentu stanu zadania}
+	\item{rejestr zadania - TR}
+	\item{deskryptor furtki zadania}
+	\end{itemize}
+Segment stanu zadania(\textit{z ang. Task State Segment}) jest to rekord, wchodzący w skład segmentu danych. 
+%	\subsection{}
+	\section{Zakonczenie}
+
+	
+
+\end{document}
+
