@@ -39,6 +39,7 @@ DANE    SEGMENT USE16
 	TIM_SEC	DW 0
 	TIM_MIN	DW 0
 	TIM_H	DW 0
+	DZIELNIK DB 10
 	
 DANE_SIZE=$-GDT_NULL
 DANE	ENDS
@@ -148,8 +149,9 @@ START:
 
 
    WYPISZ_N_ZNAKOW_Z_ATRYBUTEM TEKST,14,704,ATRYB
-	STI		
-   C1:	ADD TIM_SEC, 1
+	STI
+   C1:
+	ADD TIM_SEC, 1
 	CMP TIM_SEC, 60
 	JE  C2
 	JMP C_WYSW
@@ -166,22 +168,84 @@ START:
 	JE  C4
 	JMP C_WYSW
    C4:  MOV TIM_H, 0
+;====== wyswietlanie zegara
    C_WYSW:			; wyswietlanie zegara, ale jeszcze nie ogarniete
+	
+;====== sekundy
 	MOV AX, TIM_SEC	
 				;wypisanie sekundy dziesietnej
-	SHR AX,4
+	DIV DZIELNIK
+	ADD AL, 48
+	MOV AH,71H			;kolor
+	MOV BX,910			
+	MOV ES:[BX],AX
+
+  	MOV AX,TIM_SEC			;wypisanie sekundy dziesietnej
+	DIV DZIELNIK
+	MUL DZIELNIK	
+	MOV BX, AX
+	MOV AX,TIM_SEC	
+	SUB AX, BX
+	ADD AL, 48
+	MOV AH,71H			;kolor
+	MOV BX,912			
+	MOV ES:[BX],AX
+;====== dwukropek
+	MOV AL, 58
+	MOV AH,71H			;kolor
+	MOV BX,908			
+	MOV ES:[BX],AX
+
+;====== minuty
+
+	MOV AX, TIM_MIN	
+				;wypisanie sekundy dziesietnej
+	DIV DZIELNIK
+	ADD AL, 48
+	MOV AH,71H			;kolor
+	MOV BX,904			
+	MOV ES:[BX],AX
+
+  	MOV AX,TIM_MIN			;wypisanie sekundy dziesietnej
+	DIV DZIELNIK
+	MUL DZIELNIK	
+	MOV BX, AX
+	MOV AX,TIM_MIN	
+	SUB AX, BX
+	ADD AL, 48
+	MOV AH,71H			;kolor
+	MOV BX,906			
+	MOV ES:[BX],AX
+
+;====== dwukropek
+	MOV AL, 58
+	MOV AH,71H			;kolor
+	MOV BX,902			
+	MOV ES:[BX],AX
+
+;====== godziny
+	MOV AX, TIM_H	
+				;wypisanie sekundy dziesietnej
+	DIV DZIELNIK
 	ADD AL, 48
 	MOV AH,71H			;kolor
 	MOV BX,900			
 	MOV ES:[BX],AX
 
-  	MOV AX,TIM_SEC			;wypisanie sekundy dziesietnej
-	SHL AX,4
-	SHR AX,4
+  	MOV AX,TIM_H			;wypisanie sekundy dziesietnej
+	DIV DZIELNIK
+	MUL DZIELNIK	
+	MOV BX, AX
+	MOV AX,TIM_H	
+	SUB AX, BX
 	ADD AL, 48
 	MOV AH,71H			;kolor
-	MOV BX,902			
+	MOV BX,898			
 	MOV ES:[BX],AX
+
+
+
+
 	JMP C1
 				;koniec wyswietlania zegara
 	
