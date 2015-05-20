@@ -98,8 +98,8 @@ START:
 	MOV WORD PTR TSS_1+38H,256
 	MOV WORD PTR TSS_1+54H,8
 	MOV WORD PTR TSS_1+48H,32
-	STI
-	PUSHFD
+	STI		; ustawienie znacznika zestawienia na przerwanie
+	PUSHFD		; przeslanie znacznikow na szczyt stosu
 	POP EAX
 	MOV DWORD PTR TSS_1+24H,EAX
 	MOV WORD PTR TSS_2+4CH,16		
@@ -120,74 +120,28 @@ START:
 	MOV FS,AX
 	MOV AX,40			;Za³adowanie rejestru zadania (TR)
 	LTR AX				;deskryptorem segmentu stanu 
-;wyczyszczenie ekranu
-	
-   CZYSC:
-	MOV AL,0			;wypisanie pustego znaku	
-	MOV AH,KOLOR			;wypelnienie czarnym
-	MOV BX,POZYCJA			
-	MOV ES:[BX],AX
-	ADD POZYCJA,2
-	CMP POZYCJA,0			;wypelnienie calego ekranu
-	JNZ CZYSC
-	
-	MOV CX, 25
-   PRZEDZIALEK:
-	MOV AL,0			;wypisanie pustego znaku	
-	MOV AH,70H			;wypelnienie szarym
-	MOV BX,POZYCJA2			
-	MOV ES:[BX],AX
-	ADD POZYCJA2,2
-	MOV AL,0			;wypisanie pustego znaku	
-	MOV AH,70H			;wypelnienie szarym
-	MOV BX,POZYCJA2			
-	MOV ES:[BX],AX
-	ADD POZYCJA2, 158
-	
-	DEC CX
-	CMP CX,0			;wypelnienie calego ekranu paskiem
-	JNZ PRZEDZIALEK
+;wyczyszczenie ekranu i zrobienie przedzialka
+	CZYSC_EKRAN
+   	PRZEDZIALEK
 
 
    WYPISZ_N_ZNAKOW_Z_ATRYBUTEM TEKST,14,704,ATRYB
 	STI
    C1:
-
-   
-	MOV AX,0FFFFH			;W programie g³ównym wykonywana jest
-   PTL1:	
-	SUB AX,1
-	CMP AX,0
-	JNZ PTL1
-MOV AX,0FFFFH			;W programie g³ównym wykonywana jest
-   PTL2:	
-	SUB AX,1
-	CMP AX,0
-	JNZ PTL2
-MOV AX,0FFFFH			;W programie g³ównym wykonywana jest
-   PTL3:	
-	SUB AX,1
-	CMP AX,0
-	JNZ PTL3
-MOV AX,0FFFFH			;W programie g³ównym wykonywana jest
-   PTL4:	
-	SUB AX,1
-	CMP AX,0
-	JNZ PTL4
-
-
+;opoznienie
+	DELAY 1000
 
 	ADD TIM_SEC, 1
 	CMP TIM_SEC, 60
 	JE  C2
 	JMP C_WYSW
-;byla minuta
+; byla minuta
    C2:	MOV TIM_SEC, 0
 	ADD TIM_MIN, 1
 	CMP TIM_MIN, 60
 	JE  C3
 	JMP C_WYSW
-
+; byla godzina
    C3:	MOV TIM_MIN,0
 	ADD TIM_H, 1
 	CMP TIM_H, 24
