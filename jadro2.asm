@@ -28,13 +28,15 @@ DANE    SEGMENT USE16
 	TSS_0	DB 104 DUP (0)
 	TSS_1	DB 104 DUP (0)
 	TSS_2	DB 104 DUP (0)
-	INF_0	DB 'PROGRAM GLOWNY'
-	INF_1	DB 'ZADANIE NR 1'
-	INF_2	DB 'ZADANIE NR 2'
+	GWIAZDKA	DB '*'
 
 	KOLOR	DB 0H
 	POZYCJA	DW 0
-	POZYCJA2	DW 78
+	POZYCJA2 DW 78
+
+	POZYCJA_GWIAZDKI DW 0
+	POROWNYWANIE_GWIAZDKI DW 78
+	KOLOR_GWIAZDKI DB 01H
 
 	TIM_SEC	DW 0
 	TIM_MIN	DW 0
@@ -160,7 +162,7 @@ START:
 	MOV BX,910			
 	MOV ES:[BX],AX
 
-  	MOV AX,TIM_SEC			;wypisanie sekundy dziesietnej
+  	MOV AX,TIM_SEC			;wypisanie sekundy jednosci
 	DIV DZIELNIK
 	MUL DZIELNIK	
 	MOV BX, AX
@@ -179,14 +181,14 @@ START:
 ;====== minuty
 
 	MOV AX, TIM_MIN	
-				;wypisanie sekundy dziesietnej
+				;wypisanie minuty dziesietnej
 	DIV DZIELNIK
 	ADD AL, 48
 	MOV AH,71H			;kolor
 	MOV BX,904			
 	MOV ES:[BX],AX
 
-  	MOV AX,TIM_MIN			;wypisanie sekundy dziesietnej
+  	MOV AX,TIM_MIN			;wypisanie minuty jednosci
 	DIV DZIELNIK
 	MUL DZIELNIK	
 	MOV BX, AX
@@ -205,14 +207,14 @@ START:
 
 ;====== godziny
 	MOV AX, TIM_H	
-				;wypisanie sekundy dziesietnej
+				;wypisanie godziny dziesietnej
 	DIV DZIELNIK
 	ADD AL, 48
 	MOV AH,71H			;kolor
 	MOV BX,900			
 	MOV ES:[BX],AX
 
-  	MOV AX,TIM_H			;wypisanie sekundy dziesietnej
+  	MOV AX,TIM_H			;wypisanie godziny jednosci
 	DIV DZIELNIK
 	MUL DZIELNIK	
 	MOV BX, AX
@@ -224,34 +226,28 @@ START:
 	MOV ES:[BX],AX
 
 
-
-
 	JMP C1
 				;koniec wyswietlania zegara
 	
 ZADANIE1 PROC
-   A1:	MOV AH,71H
-	MOV CX,2
-   A2:	PUSH CX
-	MOV DI,800
-	MOV CX,12
-	MOV SI,OFFSET INF_1
-   A3:	MOV AL,[SI]
-	MOV ES:[DI],AX
-	INC SI
-	ADD DI,2
-	PUSH CX
-	MOV ECX,0FFFFFFH	;OPӏNIENIE
-   A4:	MOV DX,0FFFEH
-	ADD DX,1
-	DB 67H
-	LOOP A4
-	POP CX	
-	LOOP A3
-	POP CX
-	MOV AH,17H
-	LOOP A2
-	JMP A1
+ Z1:
+   	MOV AL, GWIAZDKA
+	MOV BX, POZYCJA_GWIAZDKI
+	MOV AH,KOLOR_GWIAZDKI			
+	MOV ES:[BX],AX
+	DELAY 10
+ 	ADD POZYCJA_GWIAZDKI, 2
+	MOV BX, POROWNYWANIE_GWIAZDKI
+	CMP POZYCJA_GWIAZDKI, BX
+	JNE Z1
+	ADD POROWNYWANIE_GWIAZDKI, 160
+	ADD POZYCJA_GWIAZDKI, 82
+	CMP POZYCJA_GWIAZDKI, 4160
+	JNE Z1
+	MOV POZYCJA_GWIAZDKI, 0
+	MOV POROWNYWANIE_GWIAZDKI, 78
+	ADD KOLOR_GWIAZDKI, 2
+	JMP Z1
 ZADANIE1 ENDP
 
 ZADANIE2 PROC
