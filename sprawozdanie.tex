@@ -8,21 +8,69 @@
 \usepackage[polish]{babel}
 \usepackage[T1]{polski}
 \usepackage[utf8]{inputenc} 
+\usepackage{indentfirst}
+
+\textheight=24.5cm
+\textwidth=17cm
+\topskip=5mm
+\topmargin=-15mm
+\leftmargin=-1mm
+\oddsidemargin=-1mm      %10mm
+\evensidemargin=-1mm     %10mm
+\renewcommand{\baselinestretch}{1}
 
 %najpierw sa informacje o dokumencie
-\title{Architektura Komputerow - Projekt}
-\author{Rafał Pieniążek \and Hubert Zapała}
-\date{28 maja}
+%\title{Architektura Komputerow - Projekt}
+%\author{Rafał Pieniążek \and Hubert Zapała}
+%\date{28 maja}
 
 \begin{document}
-\maketitle
+\thispagestyle{empty}
+
+\noindent
+\unitlength=1mm
+\fboxrule=1mm
+\setlength{\fboxrule}{3pt}\fbox{\LARGE\sf WT/P/17}\\[+2mm]
+\begin{tabular}{ll}
+\begin{minipage}[t]{110mm}
+{\LARGE\sf 
+Rafał Pieniążek\\
+Hubert Zapała}
+\end{minipage}
+ &
+\begin{minipage}[t]{55mm}
+{\Large\sf 
+\begin{tabular}{ll}
+Ocena:  & \raisebox{-3mm}{\framebox(20,9)[cc]{}}\\
+\end{tabular}
+}
+\end{minipage}
+\end{tabular}
+
+\hfill {\Large\sf Oddano: \raisebox{-3mm}{\framebox(30,9)[cc]{}}}\\[+10mm]
+
+\begin{center}
+{\huge\sf Jądro systemu operacyjnego}\\[+10mm]
+{\Large\sc 
+Architektura Komputerów 2 -- projekt\\
+%Architektura komputer\'ow (2) -- projekt\\
+2014/15\\[+10mm]}
+\end{center}
+
+\noindent
+{\sc 
+\hspace*{70mm}Prowadz\k{a}cy:\\
+\hspace*{70mm}dr inż Tadeusz Tomczak\\
+}
+
+%\maketitle
 \newpage
 \tableofcontents % to jest do spisu treści
 \newpage
 	
 	\section{Wstep}
 		\subsection{Założenia projektowe i rzeczywiste osiągnięcia}
-		W ramach projektu przygotowaliśmy podstawowe jądro systemu operacyjnego w trybie chronionym procesora. Jądro ma możliwość przełączania dwóch zadań za pomocą przerwań sprzętowych, pochodzących od klawiatury. Kod źródłowy jądra napisany jest w Turbo Assemblerze. Jądro to można uruchamiać w DOSBoxie, tak jak zwykły program, jednakże w ramach projektu zakupiliśmy stary komputer z procesorem Pentium III. Planowaliśmy uruchamiać system z dyskietki, ale nie poradziliśmy sobie z połączeniem jądra i bootloadera. Dlatego też jądro uruchamialiśmy z poziomu FreeDosa, bez  wyższych sterowników grafiki. Kolejnymi etapami prac było:
+		W ramach projektu przygotowaliśmy podstawowe jądro systemu operacyjnego w trybie chronionym procesora. Jądro ma możliwość przełączania dwóch zadań za pomocą przerwań sprzętowych, pochodzących od klawiatury. Kod źródłowy jądra napisany jest w Turbo Assemblerze. Jądro to można uruchamiać w DOSBoxie, tak jak zwykły program, jednakże w ramach projektu zakupiliśmy stary komputer z procesorem Pentium III. Planowaliśmy uruchamiać system z dyskietki, ale nie poradziliśmy sobie z połączeniem jądra i bootloadera. Dlatego też jądro uruchamialiśmy z poziomu FreeDos, bez  wyższych sterowników grafiki. Kolejnymi etapami prac było:
 			\begin{itemize}
 				\item{instalacja środowiska}
 				\item{kod przejścia procesora w tryb chroniony}
@@ -32,14 +80,28 @@
 				\item{przełączanie zadań przez przerwania sprzętowe }	
 			\end{itemize}
 	\subsection{Wyjaśnienie pojęć}
-		\begin{itemize}
-				\item{deskryptor,tablice deskryptorów}
-				\item{selektor}
-				\item{przerwanie}
+		\begin{enumerate}
+				\item{\textbf{segmentacja pamięci w trybie rzeczywistym} - adresy logiczne zawierają dwie składowe(adres bazowy segmentu oraz przesunięcie, czyli offset), które są tłumaczone na jednowymiarową pamięć fizyczną. W architekturze x86 wykorzystywane są 4 segmenty:}
+					\begin{itemize}
+					\item{programu(rejestr CS)}
+					\item{stosu(rejestr(SS)}
+					\item{danych(rejestr DS,ES)}
+					\end{itemize}
+				\item{\textbf{segmentacja pamięci w trybie chronionym} - w trybie tym istotne są rejestry sytemowe zawierające adresy bazowe tablic systemowych, służących do organizacji segmentacji. Rejestry te to:}
+					\begin{itemize}
+						\item{GDTR(Global Descriptor Table Register) - zawiera liniowy adres bazowy, oraz rozmiar globalnej tablicy deskryptorów}
+						\item{IDTR(Interrupt Descriptor Table Register) - zawiera liniowy adres bazowy, oraz rozmiar tablicy deskryptorów przerwań}
+						\item{LDTR(Local Descriptor Table Register) - zawiera selektor segmentu tablicy deskryptorów lokalnych}
+						\item{TR(Task Register) - zawiera selektor segmentu stanu zadania}
+					\end{itemize}
+				\item {\textbf{deskryptor,tablice deskryptorów }- 8 bajtowa struktura danych określająca lokalizację segmentu programu w przestrzeni adresowej pamięci, oraz zasady dostępu do pamięci. Deskryptory są przechowywane w pamięci w postaci tablic deskryptorów.}
+				\item{\textbf{selektor} jest 16 bitowym rejestrem zapisanym w jednym z rejestrów segmentowych. Jest on pewnego rodzaju wskaźnikiem na deskryptor w tablicy deskryptorów.}
+					
+				\item{\textbf{przerwanie} jest to zdarzenie, które prowadzi do obslugi przerwania. Źródłami przerwań mogą być podzespoły sprzętowe, wyjątki, lub instrukcje programowe. }
 				%TUTAJ TRZEBA DOPISAĆ KILKA RZECZY, MOZE COS O ARCHITEKTURZE?
 				%zadanie
 				%TSS
-			\end{itemize}
+			\end{enumerate}
 	
 	
 	
@@ -63,6 +125,22 @@ Segment stanu zadania(\textit{z ang. Task State Segment}) jest to rekord, wchodz
 	\section{Zakonczenie}
 
 	
+
+\begin{thebibliography}{999}
+\bibitem{aa1} W. Stanisławski, D.Raczyński 
+{\em Programowanie systemowe mikroprocesorów rodziny x86},
+PWN, Warszawa,2010.
+
+\bibitem{aa2} G.Syck,
+{\em Turbo Assembler - Biblia użytkownika}, 
+LT\&P, Warszawa, 1994.
+
+%\bibitem{aa3} A. Autor1, B. C. Autor2, 
+%{\em Tytu\l{} ksi\k{a}\.zki}, 
+%Nazwa Wydawcy, Miejsce Wydania, 1992.
+
+
+\end{thebibliography}	
 
 \end{document}
 
