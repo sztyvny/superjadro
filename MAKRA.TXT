@@ -594,14 +594,16 @@ ENDM
 
 CZYSC_EKRAN MACRO
 LOCAL CZYSC
+
+	MOV CX, 0
 CZYSC:
 	MOV AL,0			;wypisanie pustego znaku	
 	MOV AH,KOLOR			;wypelnienie czarnym
-	MOV BX,POZYCJA			
+	MOV BX,CX			
 	MOV ES:[BX],AX
-	ADD POZYCJA,2
-	CMP POZYCJA,4160			;wypelnienie calego ekranu
-	JNZ CZYSC
+	ADD CX,2
+	CMP CX,4160			;wypelnienie calego ekranu
+	JNG CZYSC
 ENDM
 
 DELAY MACRO ILE_RAZY_PETLA
