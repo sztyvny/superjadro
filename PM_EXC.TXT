@@ -1,4 +1,5 @@
 exc_0	PROC			;Wyj¹tek nr 0
+	
 	MOV AX,32
         MOV ES,AX
         MOV BX,OFFSET tekst_0
@@ -12,6 +13,7 @@ petla0: MOV ES:[SI+840],AL
 	ADD SI,2
         MOV AL,[BX]
         LOOP petla0
+	IRETD
 	JMP ETYKIETA_POWROTU_DO_RM
 exc_0	ENDP
 
