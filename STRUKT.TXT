@@ -1,4 +1,4 @@
-;Struktura opisuj¹ca deskryptor segmentu:
+;Struktura opisujaca deskryptor segmentu:
 DESKR	STRUC
   LIMIT	DW	0
   BASE_1	DW 	0
@@ -7,15 +7,15 @@ DESKR	STRUC
   ATTR_2	DB	0
   BASE_H	DB	0
 DESKR	ENDS
-;Struktura opisuj¹ca furtkê pu³apki:
+;Struktura opisujaca furtke pulapki:
 TRAP 	STRUC
-  OFFS_1	DW	0			;Offset procedury obs³ugi (bity 0...15).
-  SEL	DW	16			;Selektor segmentu programu.
-  RSRV	DB	0			;Bajt zarezerwowany.
-  ATTR	DB	8FH			;Obecnoœæ + furtka pu³apki.
-  OFFS_H	DW	0			;Offset procedury obs³ugi (bity 16…31).
+  OFFS_1	DW	0	;Offset procedury obslugi (bity 0...15).
+  SEL	DW	16		;Selektor segmentu programu.
+  RSRV	DB	0		;Bajt zarezerwowany.
+  ATTR	DB	8FH		;Obecnosc + furtka pulapki.
+  OFFS_H	DW	0	;Offset procedury obslugi (bity 16-31).
 TRAP	ENDS
-;Struktura opisuj¹ca furtkê przerwania:
+;Struktura opisujaca furtke przerwania:
 INTR	STRUC
   IOFFS_1 DW 	0
   ISEL	DW  	16
@@ -23,7 +23,7 @@ INTR	STRUC
   IATTR	DB	8EH
   IOFFS_H DW	0
 INTR	ENDS
-;Struktura opisuj¹ca element PDT:
+;Struktura opisujaca element PDT:
 PDTE STRUC
   ATRYBUTY 				DB 0
   CZTERY_OSTATNIE_BITY_ADRESU 	DB 0
@@ -32,23 +32,23 @@ PDTE STRUC
   POLE_ZAREZERWOWANE_1        	DB 0
   POLE_ZARESERWOWANE_2        	DW 0
 PDTE ENDS
-;Struktura opisuj¹ca dane kolejki zadañ:
+;Struktura opisujaca dane kolejki zadan:
 KOLEJKA_ZADAN_ STRUC
   POCZATEK_	DW 0
   KONIEC_     	DW 0
   ADRES_PULI_ 	DW 0
 KOLEJKA_ZADAN_	 ENDS
-;Struktura umo¿liwiaj¹ca synchronizacjê zadañ próbuj¹cych skorzystaæ z ekranu:
+;Struktura umozliwiajaca synchronizacje zadan probujacych skorzystac z ekranu:
 URZADZENIE STRUC
   ID_PROCESU_WLASCICIELA DW 0
   STAN                   DW 0
 URZADZENIE ENDS
-;Po³o¿enie kursora:
+;Polozenie kursora:
 POLOZENIE_KURSORA STRUC
   X          	DB 0
   Y           	DB 0
 POLOZENIE_KURSORA ENDS
-;Struktura opisuj¹ca furtkê zadania
+;Struktura opisujaca furtke zadania
 TASK	STRUC
   RSRV1		DW	0
   SEL_TSS	DW	0

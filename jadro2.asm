@@ -145,18 +145,18 @@ START:
 	JMP C_WYSW
    C4:  MOV TIM_H, 0
 ;====== wyswietlanie zegara
-   C_WYSW:			; wyswietlanie zegara, ale jeszcze nie ogarniete
+   C_WYSW:				;wyswietlanie zegara, ale jeszcze nie ogarniete
 	
 ;====== sekundy
 	MOV AX, TIM_SEC	
-				;wypisanie sekundy dziesietnej
+						;wypisanie sekundy dziesietnej
 	DIV DZIELNIK
 	ADD AL, 48
 	MOV AH,71H			;kolor
 	MOV BX,910			
 	MOV ES:[BX],AX
 
-  	MOV AX,TIM_SEC			;wypisanie sekundy jednosci
+  	MOV AX,TIM_SEC		;wypisanie sekundy jednosci
 	DIV DZIELNIK
 	MUL DZIELNIK	
 	MOV BX, AX
@@ -182,20 +182,20 @@ START:
 	MOV BX,904			
 	MOV ES:[BX],AX
 
-  	MOV AX,TIM_MIN			;wypisanie minuty jednosci
+  	MOV AX,TIM_MIN		;wypisanie minuty jednosci
 	DIV DZIELNIK
 	MUL DZIELNIK	
 	MOV BX, AX
 	MOV AX,TIM_MIN	
 	SUB AX, BX
 	ADD AL, 48
-	MOV AH,71H			;kolor
+	MOV AH,71H		;kolor
 	MOV BX,906			
 	MOV ES:[BX],AX
 
 ;====== dwukropek
 	MOV AL, 58
-	MOV AH,71H			;kolor
+	MOV AH,71H		;kolor
 	MOV BX,902			
 	MOV ES:[BX],AX
 
@@ -204,24 +204,23 @@ START:
 				;wypisanie godziny dziesietnej
 	DIV DZIELNIK
 	ADD AL, 48
-	MOV AH,71H			;kolor
+	MOV AH,71H		;kolor
 	MOV BX,900			
 	MOV ES:[BX],AX
 
-  	MOV AX,TIM_H			;wypisanie godziny jednosci
+  	MOV AX,TIM_H	;wypisanie godziny jednosci
 	DIV DZIELNIK
 	MUL DZIELNIK	
 	MOV BX, AX
 	MOV AX,TIM_H	
 	SUB AX, BX
 	ADD AL, 48
-	MOV AH,71H			;kolor
+	MOV AH,71H	;kolor
 	MOV BX,898			
 	MOV ES:[BX],AX
 
 
-	JMP C1
-				;koniec wyswietlania zegara
+	JMP C1		;koniec wyswietlania zegara
 	
 ZADANIE1 PROC
  Z1:
@@ -244,9 +243,10 @@ ZADANIE1 PROC
 	INT 1
 	JMP Z1
 ZADANIE1 ENDP
-
+	
 ZADANIE2 PROC
-	CLI			;WYZEROWANIE ZNACZNIKA ZEZWOLENIA NA PRZERWANIE
+;WYZEROWANIE ZNACZNIKA ZEZWOLENIA NA PRZERWANIE
+	CLI		
 	ETYKIETA_POWROTU_DO_RM:
 	KONTROLER_PRZERWAN_RM
 	MIEKI_POWROT_RM

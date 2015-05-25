@@ -1,4 +1,4 @@
-exc_0	PROC			;Wyj¹tek nr 0
+exc_0	PROC			;Wyjatek nr 0
 	
 	MOV AX,32
         MOV ES,AX
@@ -16,7 +16,7 @@ petla0: MOV ES:[SI+840],AL
 	IRETD
 exc_0	ENDP
 
-exc_1	PROC			;Wyj¹tek nr 1
+exc_1	PROC			;Wyjatek nr 1
 	MOV AX,32
         MOV ES,AX
         MOV BX,OFFSET tekst_1
@@ -57,7 +57,7 @@ exc_8   ENDP
 exc_9   PROC
 exc_9   ENDP
 
-exc_10  PROC			;Wyj¹tek nr 10
+exc_10  PROC			;Wyjatek nr 10
 	MOV AX,32
         MOV ES,AX
         MOV BX,OFFSET tekst_10
@@ -111,7 +111,7 @@ exc_12	endp
 
 
 
-exc_13  PROC			;Wyj¹tek nr 13
+exc_13  PROC			;Wyjatek nr 13
 	MOV AX,32
         MOV ES,AX
         MOV BX,OFFSET tekst13
@@ -146,9 +146,9 @@ petla14:MOV ES:[SI+840],AL
 exc_14	endp
 
 
-exc_ 	PROC				;Procedura obs³ugi wyj¹tku nr 0
-	MOV AX,32			;(dzielenie przez 0)
-    	MOV ES,AX			;Wyœwietlenie na ekranie tekstu TEKST_0
+exc_ 	PROC		;Procedura obslugi wyjatku nr 0
+	MOV AX,32		;(dzielenie przez 0)
+    	MOV ES,AX	;Wyswietlenie na ekranie tekstu TEKST_0
     	MOV BX,OFFSET tekst_x	
     	MOV CX,15
     	MOV AL,[BX]
