@@ -14,7 +14,6 @@ petla0: MOV ES:[SI+840],AL
         MOV AL,[BX]
         LOOP petla0
 	IRETD
-	JMP ETYKIETA_POWROTU_DO_RM
 exc_0	ENDP
 
 exc_1	PROC			;Wyj¹tek nr 1
@@ -31,7 +30,7 @@ petla1: MOV ES:[SI+1000],AL
 	ADD SI,2
         MOV AL,[BX]
         LOOP petla1
-	JMP ETYKIETA_POWROTU_DO_RM
+	IRETD
 exc_1   ENDP
 
 exc_2   PROC
@@ -72,7 +71,7 @@ petla10: MOV ES:[SI+1000],AL
 	ADD SI,2
         MOV AL,[BX]
         LOOP petla10
-	JMP ETYKIETA_POWROTU_DO_RM
+	IRETD
 exc_10  ENDP
 
 exc_11	proc
@@ -89,7 +88,7 @@ petla11: MOV ES:[SI+840],AL
 	ADD SI,2
     	MOV AL,[BX]
     	LOOP petla11
-	JMP ETYKIETA_POWROTU_DO_RM
+	IRETD
 exc_11	endp
 
 exc_12	proc
@@ -106,7 +105,7 @@ petla12: MOV ES:[SI+840],AL
 	ADD SI,2
     	MOV AL,[BX]
     	LOOP petla12
-	JMP ETYKIETA_POWROTU_DO_RM
+	IRETD
 exc_12	endp
 
 
@@ -126,7 +125,7 @@ petla13:MOV ES:[SI+1160],AL
 	ADD SI,2
         MOV AL,[BX]
         LOOP petla13
-	JMP ETYKIETA_POWROTU_DO_RM
+	IRETD
 exc_13  ENDP
 
 exc_14	proc
@@ -143,7 +142,7 @@ petla14:MOV ES:[SI+840],AL
 	ADD SI,2
     	MOV AL,[BX]
     	LOOP petla14
-	JMP ETYKIETA_POWROTU_DO_RM
+	IRETD
 exc_14	endp
 
 
@@ -161,5 +160,5 @@ petla_: MOV ES:[SI+840],AL
 	ADD SI,2
     	MOV AL,[BX]
     	LOOP petla_
-JMP ETYKIETA_POWROTU_DO_RM
+	IRETD
 exc_ ENDP
