@@ -236,41 +236,6 @@ MIEKI_POWROT_RM MACRO
   KONIEC:
 ENDM
 
-;Poni¿sze makra zapewni¹ zachowanie w nienaruszonym stanie obszaru pamiêci górnej systemu DOS:
-KOPIUJ_PAMIEC_H MACRO
-  LOCAL PETLA
-  MOV ECX, 0FFFFH
-  MOV AX, 152
-  MOV ES, AX
-  XOR DI, DI
-  XOR SI, SI
-  MOV AX, 40
-  MOV FS, AX
-  PETLA:
-    MOV AL, [FS:SI]
-    MOV [ES:DI], AL
-    INC SI
-    INC DI
-  LOOP PETLA
-ENDM
-
-PRZYWROC_PAMIEC_H MACRO
-  LOCAL PETLA2
-  MOV ECX, 0FFFFH
-  MOV AX, 152
-  MOV ES, AX
-  XOR DI, DI
-  XOR SI, SI
-  MOV AX, 40
-  MOV FS, AX
-  PETLA2:
-    MOV AL, [ES:DI]
-    MOV [FS:SI], AL
-    INC SI
-    INC DI
-  LOOP PETLA2
-ENDM
-
 INICJACJA_TSS0 MACRO
 ;Okreœlenie adresu liniowego segmentu stanu zadania TSS_0 i zapis do
 ;deskryptora GDT_TSS_0 w tablicy GDT
@@ -386,85 +351,6 @@ LOCAL WYPISZ_TEKST_, NAPOTKANY_KONIEC_TEKSTU
     MOV [ES:DI], DL       	
 ENDM
 
-ZNACZ_ELEMENT MACRO
-LOCAL PETLA, MOZNA_WYMAZYWAC, NIE_MOZNA_WYMAZYWAC
-  PUSH DX                                                 		
-  PUSH CX                                                 		
-  MOV AX, 20H                                          			
-  MOV ES, AX                                           			
-;Okreœlenie numeru zadania oraz w³aœciwej pozycji na ekranie, od której
-;rozpoczyna siê napis do wyœwietlenia:
-  MOV CX, DX                                           			
-  SUB CL, '0'                                          			
-  XOR CH, CH                                           			
-  MOV AX, 14                                           			
-  XOR DX, DX                                           			
-  MUL CX                                               			
-  MOV DI, AX                                           			
-  INC DI                                               			
-;Wymazanie wszystkich znaków z pierwszej linii ekranu prócz tych, które informuj¹
-;o dzia³aniu aktualnego zadania:
-  XOR SI, SI                                           			
-  INC SI                                               			
-  MOV CX, 80                                           			
-  PETLA:                                               			
-    CMP SI, DI                                      			
-    JB MOZNA_WYMAZYWAC                          
-    MOV AX, DI                                      			
-    ADD AX, 8                                       			
-    CMP SI, AX                                      			
-    JA MOZNA_WYMAZYWAC                              			
-    JMP NIE_MOZNA_WYMAZYWAC                         		
-    MOZNA_WYMAZYWAC:                                			
-    MOV BYTE PTR [ES:SI], 0                        		
-    NIE_MOZNA_WYMAZYWAC:                          
-    INC SI                                         			
-    INC SI                                         			  
-  LOOP PETLA                                           			
-;Wyœwietlenie informacji o dzia³aniu aktualnego zadania:
-  MOV BYTE PTR [ES:DI], 0FH                            	
-  MOV BYTE PTR [ES:DI+2], 0FH                          	
-  MOV BYTE PTR [ES:DI+4], 0FH                          		
-  MOV BYTE PTR [ES:DI+6], 0FH                          	
-  MOV BYTE PTR [ES:DI+8], 0FH                    
-  POP CX                                                  		
-  POP DX                                                  		
-ENDM
-
-ZACHOWAJ_REG MACRO CZY_BX
-  PUSHF
-  PUSH AX
-  IF CZY_BX EQ 1
-    PUSH BX
-  ENDIF
-  PUSH CX
-  PUSH DX
-  PUSH SI
-  PUSH DI
-  MOV AX, DS
-  PUSH AX
-  MOV AX, ES
-  PUSH AX
-  MOV AX, 8
-  MOV DS, AX    		;Rejestr DS ³adowany selektorem segmentu danych systemu.
-  MOV ES, AX
-ENDM
-
-PRZYWROC_REG MACRO CZY_BX
-  POP AX        
-  MOV ES, AX      
-  POP AX            	
-  MOV DS, AX     
-  POP DI       
-  POP SI        
-  POP DX 
-  POP CX  
-  IF CZY_BX EQ 1      
-    POP BX   
-  ENDIF
-  POP AX 
-  POPF
-ENDM
 
 INICJACJA_DESKRYPTORA_MODYFIKACJI_KODU MACRO
   XOR EAX, EAX
@@ -572,18 +458,19 @@ ENDM
 
 PRZEDZIALEK MACRO
 LOCAL P
+	MOV DX, 78
 	MOV CX, 25
 P:
 	MOV AL,0			;wypisanie pustego znaku	
 	MOV AH,70H			;wypelnienie szarym
-	MOV BX,POZYCJA2			
+	MOV BX,DX			
 	MOV ES:[BX],AX
-	ADD POZYCJA2,2
+	ADD DX,2
 	MOV AL,0			;wypisanie pustego znaku	
 	MOV AH,70H			;wypelnienie szarym
-	MOV BX,POZYCJA2			
+	MOV BX,DX		
 	MOV ES:[BX],AX
-	ADD POZYCJA2, 158
+	ADD DX, 158
 	
 	DEC CX
 	CMP CX,0			;wypelnienie calego ekranu paskiem
@@ -591,20 +478,6 @@ P:
 
 ENDM
 
-
-CZYSC_EKRAN MACRO
-LOCAL CZYSC
-
-	MOV CX, 0
-CZYSC:
-	MOV AL,0			;wypisanie pustego znaku	
-	MOV AH,KOLOR			;wypelnienie czarnym
-	MOV BX,CX			
-	MOV ES:[BX],AX
-	ADD CX,2
-	CMP CX,4160			;wypelnienie calego ekranu
-	JNG CZYSC
-ENDM
 
 DELAY MACRO ILE_RAZY_PETLA
 LOCAL PTL1
