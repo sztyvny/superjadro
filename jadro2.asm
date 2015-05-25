@@ -10,7 +10,7 @@ DANE    SEGMENT USE16
 	GDT_TSS_1	DESKR <103,0,0,89H,0,0>			;48
 	GDT_TSS_2	DESKR <103,0,0,89H,0,0>			;56
 	GDT_SIZE = $ - GDT_NULL 
-;Tablica deskryptorów przerwañ IDT
+;Tablica deskryptorow przerwan IDT
 	IDT	LABEL WORD
 	INCLUDE PM_IDT.TXT
 	IDT_0	INTR <PROC_0>
@@ -55,7 +55,7 @@ INCLUDE PM_EXC.TXT
 INCLUDE MAKRA.TXT
 PROC_0	PROC
 PROC_0	ENDP
-;Procedura obs³ugi przerwania od klawiatury (przerwanie nr 1)
+;Procedura obslugi przerwania od klawiatury (przerwanie nr 1)
 PROC_1	PROC
 	PUSH AX
 	PUSH DX
@@ -66,7 +66,7 @@ PROC_1	PROC
 	OUT 61H,AL
 	AND AL,7FH
 	OUT 61H,AL
-	MOV AL,20H	;Sygna³ koñca obs³ugi przerwania
+	MOV AL,20H	;Sygnal konca obslugi przerwania
 	OUT 20H,AL
 	CMP DL,2	;Klawisz '1'
 	JE TSK0
@@ -75,12 +75,12 @@ PROC_1	PROC
 	CMP DL,0BH	;Klawisz '0'
 	JE TSK2
 	JMP OUT_P1
-   TSK0:	JMP DWORD PTR T0_ADDR	;Prze³¹czenie zadania na zadanie 
-					;nr 0 (program g³ówny)
+   TSK0:	JMP DWORD PTR T0_ADDR	;Przelaczenie zadania na zadanie 
+					;nr 0 (program glowny)
 	JMP out_p1
-   TSK1:	JMP DWORD PTR T1_ADDR	;Prze³¹czenie zadania na zadanie nr 1
+   TSK1:	JMP DWORD PTR T1_ADDR	;Przelaczenie zadania na zadanie nr 1
 	JMP OUT_P1
-   TSK2:	JMP DWORD PTR T2_ADDR	;Prze³¹czenie zadania na zadanie nr 2
+   TSK2:	JMP DWORD PTR T2_ADDR	;Przelaczenie zadania na zadanie nr 2
    OUT_P1:	POP DX
 	POP AX
 	IRETD
@@ -122,7 +122,7 @@ START:
 	MOV ES,AX
 	MOV GS,AX
 	MOV FS,AX
-	MOV AX,40			;Za³adowanie rejestru zadania (TR)
+	MOV AX,40			;Zaladowanie rejestru zadania (TR)
 	LTR AX				;deskryptorem segmentu stanu 
 ;wyczyszczenie ekranu i zrobienie przedzialka
 	CZYSC_EKRAN

@@ -8,8 +8,8 @@
 \usepackage[polish]{babel}
 \usepackage[T1]{polski}
 \usepackage[utf8]{inputenc} 
-\usepackage{indentfirst}
-
+\usepackage{indentfirst}%wcięcie pierwszego wiersza
+\usepackage{listings}%listing kodu
 \textheight=24.5cm
 \textwidth=17cm
 \topskip=5mm
@@ -74,8 +74,8 @@ Architektura Komputerów 2 -- projekt\\
 			\begin{itemize}
 				\item{instalacja środowiska}
 				\item{kod przejścia procesora w tryb chroniony}
-				\item{obsługa przerwań i wyjątków}
 				\item{wykorzystanie pamieci rozszerzonej } (Aktywacja linii A20)
+				\item{obsługa przerwań i wyjątków}
 				\item{przełączanie zadań przez furtkę zadania }	
 				\item{przełączanie zadań przez przerwania sprzętowe }	
 			\end{itemize}
@@ -164,6 +164,23 @@ LT\&P, Warszawa, 1994.
 
 
 \end{thebibliography}	
+\section{Kod programu}
+
+\subsection{\textit{jadro.asm}}
+
+\lstinputlisting[language = {[x86masm]Assembler}]{jadro2.asm}
+
+\subsection{\textit{STRUKT.TXT}}
+\lstinputlisting[language = {[x86masm]Assembler}]{STRUKT.TXT}
+
+\subsection{\textit{PM\_DATA.TXT}}
+%\lstinputlisting[language = {[x86masm]Assembler}]{PM_DATA.TXT}
+
+\subsection{\textit{PM\_EXC.TXT}}
+%\lstinputlisting[language = {[x86masm]Assembler}]{PM_EXC.TXT}
+
+\subsection{\textit{PM\_IDT.TXT}}
+%\lstinputlisting[language = {[x86masm]Assembler}]{PM_IDT.TXT}
 
 \end{document}
 
