@@ -8,8 +8,10 @@
 \usepackage[polish]{babel}
 \usepackage[T1]{polski}
 \usepackage[utf8]{inputenc} 
-\usepackage{indentfirst}
+\usepackage{indentfirst}%wcięcie pierwszego wiersza
+\usepackage{listings}%listing kodu
 
+        
 \textheight=24.5cm
 \textwidth=17cm
 \topskip=5mm
@@ -74,8 +76,8 @@ Architektura Komputerów 2 -- projekt\\
 			\begin{itemize}
 				\item{instalacja środowiska}
 				\item{kod przejścia procesora w tryb chroniony}
-				\item{obsługa przerwań i wyjątków}
 				\item{wykorzystanie pamieci rozszerzonej } (Aktywacja linii A20)
+				\item{obsługa przerwań i wyjątków}
 				\item{przełączanie zadań przez furtkę zadania }	
 				\item{przełączanie zadań przez przerwania sprzętowe }	
 			\end{itemize}
@@ -98,7 +100,7 @@ Architektura Komputerów 2 -- projekt\\
 				\item{\textbf{selektor} jest 16 bitowym rejestrem zapisanym w jednym z rejestrów segmentowych. Jest on pewnego rodzaju wskaźnikiem na deskryptor w tablicy deskryptorów.}
 					
 				\item{\textbf{przerwanie} jest to zdarzenie, które prowadzi do obslugi przerwania. Źródłami przerwań mogą być podzespoły sprzętowe, wyjątki, lub instrukcje programowe. }
-				\item{\textbf{Segment stanu zadania - TSS} (\textit{z ang. Task State Segment}) jest to rekord, wchodzący w skład segmentu danych. Każde zadanie posiada swój TSS, przechowujący bierzący kontekst zadania.}
+				\item{\textbf{Segment stanu zadania - TSS} (\textit{z ang. Task State Segment}) jest to rekord, wchodzący w skład segmentu danych. Każde zadanie posiada swój TSS, przechowujący bieżący kontekst zadania.}
 		\end{enumerate}
 	
 	
@@ -148,7 +150,7 @@ Architektura Komputerów 2 -- projekt\\
 	\section{Zakonczenie}
 		Realizacja implementacji prostego jądra systemu operacyjnego okazała się zadaniem niełatwym, lecz możliwym do wykonania. Zagłębiając się w teorię poznawaliśmy coraz więcej skomplikowanych zagadnien i  terminów.  Praktyczna realizacja pozwoliła na dogłebne zrozumienie zasad i metod stosowanych podczas implementacji. 
 	
-
+	\section{Bibiliografia}
 \begin{thebibliography}{999}
 \bibitem{aa1} W. Stanisławski, D.Raczyński 
 {\em Programowanie systemowe mikroprocesorów rodziny x86},
@@ -164,6 +166,26 @@ LT\&P, Warszawa, 1994.
 
 
 \end{thebibliography}	
+
+
+
+\section{Kod programu}
+
+\subsection{\textit{jadro.asm}}
+\lstinputlisting{jadro2.asm}
+
+\subsection{\textit{STRUKT.TXT}}
+\lstinputlisting[language = {[x86masm]Assembler}]{STRUKT.TXT}
+
+\subsection{\textit{PM\_DATA.TXT}}
+\lstinputlisting[language = {[x86masm]Assembler}]{PM_DATA.TXT}
+
+\subsection{\textit{PM\_EXC.TXT}}
+\lstinputlisting[language = {[x86masm]Assembler}]{PM_EXC.TXT}
+
+\subsection{\textit{PM\_IDT.TXT}}
+\lstinputlisting[language = {[x86masm]Assembler}]{PM_IDT.TXT}
+
 
 \end{document}
 

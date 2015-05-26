@@ -1,4 +1,4 @@
- tekst_x		DB 'OBS£UGA WYJATKU'
+ tekst_x		DB 'OBSLUGA WYJATKU'
 atryb	 	DB 1Eh
 tekst_0 	DB 'OBSLUGA WYJATKU nr 0 (Dzielenie przez zero)'
 atryb_0		DB 1Eh

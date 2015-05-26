@@ -11,7 +11,7 @@ DANE    SEGMENT USE16
 	GDT_TSS_2	DESKR <103,0,0,89H,0,0>			;56
 	GDT_HIMEM	DESKR <0FFFFh,0,20H,92H,00H,0> 		;segment 64kb
 	GDT_SIZE = $ - GDT_NULL 
-;Tablica deskryptorów przerwañ IDT
+;Tablica deskryptorow przerwan IDT
 	IDT	LABEL WORD
 	INCLUDE PM_IDT.TXT
 	IDT_0	INTR <PROC_0>
@@ -55,7 +55,7 @@ INCLUDE MAKRA.TXT
 	
 PROC_0	PROC
 PROC_0	ENDP
-;Procedura obs³ugi przerwania od klawiatury (przerwanie nr 1)
+;Procedura obslugi przerwania od klawiatury (przerwanie nr 1)
 PROC_1	PROC
 	PUSH AX
 	PUSH DX
@@ -66,7 +66,7 @@ PROC_1	PROC
 	OUT 61H,AL
 	AND AL,7FH
 	OUT 61H,AL
-	MOV AL,20H	;Sygna³ koñca obs³ugi przerwania
+	MOV AL,20H	;Sygnal konca obslugi przerwania
 	OUT 20H,AL
 	CMP DL,2	;Klawisz '1'
 	JE TSK0
@@ -75,12 +75,12 @@ PROC_1	PROC
 	CMP DL,0BH	;Klawisz '0'
 	JE TSK2
 	JMP OUT_P1
-   TSK0:	JMP DWORD PTR T0_ADDR	;Prze³¹czenie zadania na zadanie 
-					;nr 0 (program g³ówny)
+   TSK0:	JMP DWORD PTR T0_ADDR	;Przelaczenie zadania na zadanie 
+					;nr 0 (program glowny)
 	JMP out_p1
-   TSK1:	JMP DWORD PTR T1_ADDR	;Prze³¹czenie zadania na zadanie nr 1
+   TSK1:	JMP DWORD PTR T1_ADDR	;Przelaczenie zadania na zadanie nr 1
 	JMP OUT_P1
-   TSK2:	JMP DWORD PTR T2_ADDR	;Prze³¹czenie zadania na zadanie nr 2
+   TSK2:	JMP DWORD PTR T2_ADDR	;Przelaczenie zadania na zadanie nr 2
    OUT_P1:	POP DX
 	POP AX
 	IRETD
@@ -125,7 +125,7 @@ START:
 	MOV ES,AX
 	MOV GS,AX
 	MOV FS,AX
-	MOV AX,40			;Za³adowanie rejestru zadania (TR)
+	MOV AX,40			;Zaladowanie rejestru zadania (TR)
 	LTR AX				;deskryptorem segmentu stanu 
 ;zrobienie przedzialka
    	PRZEDZIALEK
@@ -135,7 +135,7 @@ START:
 	STI
    C1:
 ;opoznienie
-	DELAY 1000
+	DELAY 27000
 
 	ADD TIM_SEC, 1
 	CMP TIM_SEC, 60
@@ -155,18 +155,18 @@ START:
 	JMP C_WYSW
    C4:  MOV TIM_H, 0
 ;====== wyswietlanie zegara
-   C_WYSW:			; wyswietlanie zegara, ale jeszcze nie ogarniete
+   C_WYSW:				;wyswietlanie zegara, ale jeszcze nie ogarniete
 	
 ;====== sekundy
 	MOV AX, TIM_SEC	
-				;wypisanie sekundy dziesietnej
+						;wypisanie sekundy dziesietnej
 	DIV DZIELNIK
 	ADD AL, 48
 	MOV AH,71H			;kolor
 	MOV BX,910			
 	MOV ES:[BX],AX
 
-  	MOV AX,TIM_SEC			;wypisanie sekundy jednosci
+  	MOV AX,TIM_SEC		;wypisanie sekundy jednosci
 	DIV DZIELNIK
 	MUL DZIELNIK	
 	MOV BX, AX
@@ -192,20 +192,20 @@ START:
 	MOV BX,904			
 	MOV ES:[BX],AX
 
-  	MOV AX,TIM_MIN			;wypisanie minuty jednosci
+  	MOV AX,TIM_MIN		;wypisanie minuty jednosci
 	DIV DZIELNIK
 	MUL DZIELNIK	
 	MOV BX, AX
 	MOV AX,TIM_MIN	
 	SUB AX, BX
 	ADD AL, 48
-	MOV AH,71H			;kolor
+	MOV AH,71H		;kolor
 	MOV BX,906			
 	MOV ES:[BX],AX
 
 ;====== dwukropek
 	MOV AL, 58
-	MOV AH,71H			;kolor
+	MOV AH,71H		;kolor
 	MOV BX,902			
 	MOV ES:[BX],AX
 
@@ -214,24 +214,23 @@ START:
 				;wypisanie godziny dziesietnej
 	DIV DZIELNIK
 	ADD AL, 48
-	MOV AH,71H			;kolor
+	MOV AH,71H		;kolor
 	MOV BX,900			
 	MOV ES:[BX],AX
 
-  	MOV AX,TIM_H			;wypisanie godziny jednosci
+  	MOV AX,TIM_H	;wypisanie godziny jednosci
 	DIV DZIELNIK
 	MUL DZIELNIK	
 	MOV BX, AX
 	MOV AX,TIM_H	
 	SUB AX, BX
 	ADD AL, 48
-	MOV AH,71H			;kolor
+	MOV AH,71H	;kolor
 	MOV BX,898			
 	MOV ES:[BX],AX
 
 
-	JMP C1
-				;koniec wyswietlania zegara
+	JMP C1		;koniec wyswietlania zegara
 	
 ZADANIE1 PROC
  Z1:
@@ -239,7 +238,11 @@ ZADANIE1 PROC
 	MOV BX, POZYCJA_GWIAZDKI
 	MOV AH,KOLOR_GWIAZDKI			
 	MOV ES:[BX],AX
+<<<<<<< HEAD
 	DELAY 1
+=======
+	DELAY 100
+>>>>>>> fee255a01b4947fbee772efe86aeefc33f009084
  	ADD POZYCJA_GWIAZDKI, 2
 	MOV BX, POROWNYWANIE_GWIAZDKI
 	CMP POZYCJA_GWIAZDKI, BX
@@ -254,9 +257,10 @@ ZADANIE1 PROC
 	INT 1
 	JMP Z1
 ZADANIE1 ENDP
-
+	
 ZADANIE2 PROC
-	CLI			;WYZEROWANIE ZNACZNIKA ZEZWOLENIA NA PRZERWANIE
+;WYZEROWANIE ZNACZNIKA ZEZWOLENIA NA PRZERWANIE
+	CLI		
 	ETYKIETA_POWROTU_DO_RM:
 	KONTROLER_PRZERWAN_RM
 	MIEKI_POWROT_RM
