@@ -36,8 +36,8 @@
 \begin{tabular}{ll}
 \begin{minipage}[t]{110mm}
 {\LARGE\sf 
-Rafał Pieniążek\\
-Hubert Zapała}
+Rafał Pieniążek 209847\\
+Hubert Zapała  209941}
 \end{minipage}
  &
 \begin{minipage}[t]{55mm}
@@ -70,7 +70,7 @@ Architektura Komputerów 2 -- projekt\\
 \tableofcontents % to jest do spisu treści
 \newpage
 	
-	\section{Wstep}
+	\section{Wstęp}
 		\subsection{Założenia projektowe i rzeczywiste osiągnięcia}
 		W ramach projektu przygotowaliśmy podstawowe jądro systemu operacyjnego w trybie chronionym procesora. Jądro ma możliwość przełączania dwóch zadań za pomocą przerwań sprzętowych, pochodzących od klawiatury. Kod źródłowy jądra napisany jest w Turbo Assemblerze. Jądro to można uruchamiać w DOSBoxie, tak jak zwykły program, jednakże w ramach projektu zakupiliśmy stary komputer z procesorem Pentium III. Planowaliśmy uruchamiać system z dyskietki, ale nie poradziliśmy sobie z połączeniem jądra i bootloadera. Dlatego też jądro uruchamialiśmy z poziomu FreeDos, bez  wyższych sterowników grafiki. Kolejnymi etapami prac było:
 			\begin{itemize}
@@ -86,7 +86,7 @@ Architektura Komputerów 2 -- projekt\\
 				\item{\textbf{segmentacja pamięci w trybie rzeczywistym} - adresy logiczne zawierają dwie składowe(adres bazowy segmentu oraz przesunięcie, czyli offset), które są tłumaczone na jednowymiarową pamięć fizyczną. W architekturze x86 wykorzystywane są 4 segmenty:}
 					\begin{itemize}
 					\item{programu(rejestr CS)}
-					\item{stosu(rejestr(SS)}
+					\item{stosu(rejestr SS)}
 					\item{danych(rejestr DS,ES)}
 					\end{itemize}
 				\item{\textbf{segmentacja pamięci w trybie chronionym} - w trybie tym istotne są rejestry sytemowe zawierające adresy bazowe tablic systemowych, służących do organizacji segmentacji. Rejestry te to:}
@@ -101,6 +101,7 @@ Architektura Komputerów 2 -- projekt\\
 					
 				\item{\textbf{przerwanie} jest to zdarzenie, które prowadzi do obslugi przerwania. Źródłami przerwań mogą być podzespoły sprzętowe, wyjątki, lub instrukcje programowe. }
 				\item{\textbf{Segment stanu zadania - TSS} (\textit{z ang. Task State Segment}) jest to rekord, wchodzący w skład segmentu danych. Każde zadanie posiada swój TSS, przechowujący bieżący kontekst zadania.}
+				\item{\textbf{Furtka zadania} specjalny deskryptor wykorzystywany do przełączania zadań. W furtce zadania pokazuje się selektor TSS zadania, które ma być wykonane.} 
 		\end{enumerate}
 	
 	
@@ -115,15 +116,15 @@ Architektura Komputerów 2 -- projekt\\
 	\subsection{Struktura plików}
 		Podczas implementacji projektu podzielilśmy kod programu na następujące pliki:
 		\begin{itemize}
-			\item{jadro\.asm - plik główny}
-			\item{MAKRA.TXT - plik zawierający funkcje m.in. wyświetlania tekstu na ekranie, miękkiego powrotu do RM, inicjowania deskryptorów itd.  }
+			\item{jadro.asm - plik główny}
+			\item{MAKRA.TXT - plik zawierający funkcje m.in. wyświetlania tekstu na ekranie, miękkiego powrotu do trybu rzeczywistego, inicjowania deskryptorów itd.  }
 			\item{PM\_DATA.TXT - określone teksty do wyświetlnia na ekranie}
 			\item{PM\_EXC.TXT - procedury obsługi wyjątków}
 			\item{PM\_IDT.TXT - poszczególne pozycje tablicy IDT}
 			\item{STRUKT.TXT - plik zawierający opisy struktury tj. deskryptor segmentu, furtkę przerwania}
 		\end{itemize}
 	\subsection{Przełączenie zadań}
-			Podstawową funkcją jądra systemu operacyjnego jest możliwość przełączania zadań. Zadanie, jest to wykonywany program, lub niezależny jego fragment. Podczas przełączania zadań wykorzystywane są :
+			Podstawową funkcją jądra systemu operacyjnego jest możliwość przełączania zadań. Zadanie, jest to wykonywany program, lub niezależny jego fragment. Podczas przełączania zadań możliwe jest wykorzystywanie następujących środków :
 		\begin{itemize}
 			\item{segment stanu zadania - TSS}
 			\item{deskryptor segmentu stanu zadania}
@@ -131,23 +132,25 @@ Architektura Komputerów 2 -- projekt\\
 			\item{deskryptor furtki zadania}
 		\end{itemize}
 	\subsection{Praca jądra systemu}
+		\subsubsection{Środowisko}
+			Do projektu użyliśmy komputera z procesorem Intel Pentium III, taktowanego zegarem 4,2 GHz i posiadający 256MB pamięci RAM, oraz zainstalowany system FreeDos w wersji 1.1. Jądro można również skompilować i uruchomić przy wykorzystaniu programu DOSBOX (przetestowano dla DOSBOX v0.74). Kod źródłowy jest napisany w składni Turbo Assemblera. Do kompilacji użyliśmy kompilatora TASM.EXE w wersji 3.1 oraz linkera TLINK.EXE w wersji 2.0. Oba pliki zostały załączone do projektu i znajdują się razem z plikami źródłowymi.
 		\subsubsection{Kompilacja i linkowanie}
-			Po skompilowaniu programu : \textit{tasm jadro.asm} , a następnie zlinkowaniu go :  \textit{tlink jadro.obj} otrzymujemy plik wykonywalny \textit{jadro.exe}. 
+			 Po uruchomieniu komputera, załadowaniu DOS(bez sterowników grafiki) i przejściu do katalogu z projektem należy skomilować program : \textit{tasm jadro.asm} , a następnie zlinkować go :  \textit{tlink jadro.obj} .W ten sposób otrzymujemy plik wykonywalny \textit{jadro.exe}. 
 		\subsubsection{Inicjalizacja} 	
-			Po  uruchomieniu \textit{jadro.exe} następuje inicjalizacja struktur deskryptorów, po czym procesor przechodzi w tryb chroniony. Na ekranie wyświetlana jest pionowa kreska dzieląca ekran na dwie połowy. Po prawej stronie zostaje uruchamione zadanie główne, jakim jest zegar cyfrowy odliczający czas od 00:00:00.
+			Po  uruchomieniu \textit{jadro.exe} następuje inicjalizacja struktur deskryptorów.Definicja struktur znajduje się w pliku STRUKT.TXT linie 1 do 9. Dokładny kod opisanej procedury znajduje sie w pliku MAKRA.TXT linie 144 do 175, po czym procesor przechodzi w tryb chroniony. Na ekranie wyświetlana jest pionowa kreska dzieląca ekran na dwie połowy. Po prawej stronie zostaje uruchamione zadanie główne, jakim jest zegar cyfrowy odliczający czas od 00:00:00.
 		\subsubsection{Oprogramowanie kontrolera przerwań}
 			Układ obsługi przerwań składa się z dwóch układów 8259A,połączonych kaskadowo.Układ 8259 posiada Jeden z nich pełni funckje master, drugi slave. Dzięki kaskadowemu połączeniu możliwa jest obsługa do 15 przerwań sprzętowych.  
 		
 		\subsubsection{Obsługa klawiatury}		
 			Zewnętrzny kontroler klawiatury rozpoznaje który klawisz został wciśniety (lub zwolniony). Warto zauważyć, że pobrany kod nie jest kodem ASCII danego symbolu. Interesujący jest również fakt,że kod wciśnięcia jest inny niż zwolnienia.Obsługa kontrolera odbywa się poprzez porty buforowe(60h i 61 h) oraz port sterujący (64h). Po wygenerowaniu przerwania kod klawisza odczytywany jest z portu 60h. Po pobraniu wartości trzeba wysłać potwierdzenie odbioru na port 61h. Końcową czynnością jest poinformowanie kontrolera przerwań o zakończeniu obsługi przerwania - co jest wykonywane przez zapis wartości 20h na port 20h.
 			\subsubsection{Przełączenie zadania przerwaniem sprzętowym}
-			 W architekturze x86 przewidziano możliwość wstawienia furtek zadania bezpośrednio do tablicy deskryptorów przerwań. Wówczas generacja przerwania sprzętowego powoduje przełączenie zadania i wykonanie zadania zagnieżdżonego. Podczas przełączania zadania procesor zapamiętuje kontekst bierzącego zadania w jego segmencie stanu zadania, a następnie odczytuje z TSS kontekst nowego zadania, zawierający selektor segmentu i offset, od którego należy rozpocząć jego realizację.  Następnie wykonywany jest rozkaz skoku odległego \textit{JMP DWORD PTR }.
+			 W architekturze x86 przewidziano możliwość wstawienia furtek zadania bezpośrednio do tablicy deskryptorów przerwań. Wówczas generacja przerwania sprzętowego powoduje przełączenie zadania i wykonanie zadania zagnieżdżonego. Podczas przełączania zadania procesor zapamiętuje kontekst bieżącego zadania w jego segmencie stanu zadania, a następnie odczytuje z TSS kontekst nowego zadania, zawierający selektor segmentu i offset, od którego należy rozpocząć jego realizację.  Następnie wykonywany jest rozkaz skoku odległego ~\textit{JMP DWORD PTR }.
  	
 	\subsubsection{Zadania w projekcie}
-		W naszym projekcie zostały zaimplementowane dwa zadania. Jak już zostało powiedziane, jednym z nich jest  zegar odliczający czas od 00:00:00. Drugie zadanie, działające po lewej stronie ekranu to wypisywanie znaku gwiazdki, wraz ze zmieniającym się kolorem tła i czczionki. Przełączenie na to zadanie następuje po wciśnieciu klawisza 1.Aby przerwać wyświetlanie gwiazdek i wznowić pracę zegara należy nacisnąć przycisk 2 na klawiaturze.
+		W naszym projekcie zostały zaimplementowane dwa zadania. Jak już zostało powiedziane, jednym z nich jest  zegar odliczający czas od 00:00:00. Drugie zadanie, działające po lewej stronie ekranu to wypisywanie znaku gwiazdki, wraz ze zmieniającym się kolorem tła i czczionki. Po zapełnieniu całego dostępnego miejsca znakami wywoływane jest przerwanie sprzętowe INT.  Przełączenie na to zadanie następuje po wciśnieciu klawisza 2.Aby przerwać wyświetlanie gwiazdek i wznowić pracę zegara należy nacisnąć przycisk 1 na klawiaturze.
 	
 	
-	\section{Zakonczenie}
+	\section{Zakończenie}
 		Realizacja implementacji prostego jądra systemu operacyjnego okazała się zadaniem niełatwym, lecz możliwym do wykonania. Zagłębiając się w teorię poznawaliśmy coraz więcej skomplikowanych zagadnien i  terminów.  Praktyczna realizacja pozwoliła na dogłebne zrozumienie zasad i metod stosowanych podczas implementacji. 
 	
 	\section{Bibiliografia}
@@ -171,20 +174,25 @@ LT\&P, Warszawa, 1994.
 
 \section{Kod programu}
 
+\lstset{numbers=left}
+
 \subsection{\textit{jadro.asm}}
 \lstinputlisting{jadro2.asm}
 
 \subsection{\textit{STRUKT.TXT}}
-\lstinputlisting[language = {[x86masm]Assembler}]{STRUKT.TXT}
+\lstinputlisting{STRUKT.TXT}
+
+\subsection{\textit{MAKRA.TXT}}
+\lstinputlisting{MAKRA.TXT}
 
 \subsection{\textit{PM\_DATA.TXT}}
-\lstinputlisting[language = {[x86masm]Assembler}]{PM_DATA.TXT}
+\lstinputlisting{PM_DATA.TXT}
 
 \subsection{\textit{PM\_EXC.TXT}}
-\lstinputlisting[language = {[x86masm]Assembler}]{PM_EXC.TXT}
+\lstinputlisting{PM_EXC.TXT}
 
 \subsection{\textit{PM\_IDT.TXT}}
-\lstinputlisting[language = {[x86masm]Assembler}]{PM_IDT.TXT}
+\lstinputlisting{PM_IDT.TXT}
 
 
 \end{document}

@@ -31,7 +31,7 @@ ENDM
 
 A20_ON MACRO
 LOCAL  KONIEC_A20,BRAK_FAST_A20, PETLA1_A20, PETLA2_A20, PETLA3_A20, PETLA4_A20
-;Czy A20 ju¿ aktywne:
+;Czy A20 juz aktywne:
   MOV A20,0
   CZY_A20
   JE KONIEC_A20
@@ -47,37 +47,37 @@ LOCAL  KONIEC_A20,BRAK_FAST_A20, PETLA1_A20, PETLA2_A20, PETLA3_A20, PETLA4_A20
   JE KONIEC_A20
   BRAK_FAST_A20:
 ;Uaktywnienie A20 poprzez sterownik klawiatury:
-;Oczekiwanie na pusty bufor wejœciowy:
+;Oczekiwanie na pusty bufor wejsciowy:
   XOR AX, AX
   PETLA1_A20:
     IN AL, 64H
     BTR AX, 1
   JC PETLA1_A20
-;Wys³anie komendy odczytu portu wyjœciowego:
-  MOV AL, 0D0H    		;Rozkaz odczytu portu wyjœciowego.
+;Wyslanie komendy odczytu portu wyjsciowego:
+  MOV AL, 0D0H    		;Rozkaz odczytu portu wyjsciowego.
   OUT 64H, AL
   XOR AX, AX
   PETLA2_A20:
     IN AL, 64H
-    BTR AX, 0     		;Stan bufora wyjœciowego (0 pusty, 1 dane s¹ jeszcze w buforze).
+    BTR AX, 0     		;Stan bufora wyjsciowego (0 pusty, 1 dane sa jeszcze w buforze).
   JNC PETLA2_A20
-;Odczyt stanu portu wyjœciowego:
+;Odczyt stanu portu wyjsciowego:
   XOR AX, AX
   IN AL, 60H
   PUSH AX
   PETLA3_A20:
     IN AL, 64H
-    BTR AX, 1     		;Oczekiwanie na pusty bufor wejœciowy.
+    BTR AX, 1     		;Oczekiwanie na pusty bufor wejsciowy.
   JC PETLA3_A20
-;Komenda zapisu do portu wyjœciowego:
-  MOV AL, 0D1H  		;Rozkaz zapisu portu wyjœciowego.
+;Komenda zapisu do portu wyjsciowego:
+  MOV AL, 0D1H  		;Rozkaz zapisu portu wyjsciowego.
   OUT 64H, AL
   PETLA4_A20:
     XOR AX, AX
     IN AL, 64H
-    BTR AX, 1    		;Oczekiwanie na pusty bufor wejœciowy.
+    BTR AX, 1    		;Oczekiwanie na pusty bufor wejsciowy.
   JC PETLA4_A20
-;Zapis portu wyjœciowego:
+;Zapis portu wyjsciowego:
   POP AX
   OR AL, 10B
   OUT 60H, AL
@@ -96,44 +96,44 @@ LOCAL KONIEC_A20, PETLA1_A20, PETLA2_A20, PETLA3_A20, PETLA4_A20, WYLACZ_FAST
   CMP A20, 1
   JE WYLACZ_FAST
 ;Dezaktywacja A20 poprzez sterownik klawiatury:
-;Oczekiwanie na pusty bufor wejœciowy:
+;Oczekiwanie na pusty bufor wejsciowy:
   XOR AX, AX
   PETLA1_A20:
   IN AL, 64H
   BTR AX, 1
   JC PETLA1_A20
-;Wys³anie komendy odczytu statusu
-  MOV AL, 0D0H    		;Rozkaz odczytu portu wyjœciowego.
+;Wyslanie komendy odczytu statusu
+  MOV AL, 0D0H    		;Rozkaz odczytu portu wyjsciowego.
   OUT 64H, AL
   XOR AX, AX
   PETLA2_A20:
     IN AL, 64H
-    BTR AX, 0     		;Stan bufora wyjœciowego (0 pusty, 1 dane s¹ jeszcze w buforze).
+    BTR AX, 0     		;Stan bufora wyjsciowego (0 pusty, 1 dane sa jeszcze w buforze).
   JNC PETLA2_A20
-;Odczyt stanu portu wyjœciowego:
+;Odczyt stanu portu wyjsciowego:
   XOR AX, AX
   IN AL, 60H
   PUSH AX
   PETLA3_A20:
     IN AL, 64H
-    BTR AX, 1     		;Oczekiwanie na pusty bufor wejœciowy.
+    BTR AX, 1     		;Oczekiwanie na pusty bufor wejsciowy.
   JC PETLA3_A20
-;Komenda zapisu do portu wyjœciowego:
-  MOV AL, 0D1H  		;Rozkaz zapisu portu wyjœciowego.
+;Komenda zapisu do portu wyjsciowego:
+  MOV AL, 0D1H  		;Rozkaz zapisu portu wyjsciowego.
   OUT 64H, AL
   PETLA4_A20:
     XOR AX, AX
     IN AL, 64H
-    BTR AX, 1    		;Oczekiwanie na pusty bufor wejœciowy.
+    BTR AX, 1    		;Oczekiwanie na pusty bufor wejsciowy.
   JC PETLA4_A20
-;Zapis portu wyjœciowego:
+;Zapis portu wyjsciowego:
   POP AX
   AND AL, 11111101B
   OUT 60H, AL
   MOV A20, 2
   CZY_A20
   JE KONIEC_A20
-;Wy³¹czenie A20 metod¹ fast A20:
+;Wylaczenie A20 metoda fast A20:
   WYLACZ_FAST:
     IN AL, 92H
     AND AL, 0FCH
@@ -148,7 +148,7 @@ INICJOWANIE_DESKRYPTOROW MACRO
   SHLD DX,AX,4					
   SHL AX,4					
   MOV BX,OFFSET GDT_DANE	;Wpisanie adresu bazowego segmentu danych do odpowiednich	
-  MOV [BX].BASE_1,AX		;pól deskryptora gdt_dane.				
+  MOV [BX].BASE_1,AX		;pol deskryptora gdt_dane.				
   MOV [BX].BASE_M,DL					
   MOV AX,CS										
   MOV DL,0								    	
@@ -165,32 +165,32 @@ INICJOWANIE_DESKRYPTOROW MACRO
   MOV [BX].BASE_1,AX				
   MOV [BX].BASE_M,DL				
   MOV BX,OFFSET GDT_DANE	;Przepisanie adresu bazowego oraz granicznego segmentu danych do  						
-				;pseudoskryptora opisuj¹cego globaln¹ tablicê deskryptorów.
+				;pseudoskryptora opisujacego globalna tablice deskryptorow.
   MOV AX,[BX].BASE_1				
   MOV WORD PTR PDESKR+2,AX			        	
   MOV DL,[BX].BASE_M				
   MOV BYTE PTR PDESKR+4,DL			
   MOV WORD PTR PDESKR,GDT_SIZE-1
-  LGDT PDESKR			;Za³adowanie rejestru GDTR.  
+  LGDT PDESKR			;Zaladowanie rejestru GDTR.  
  ENDM     
 
 AKTYWACJA_PM MACRO	            				  	
-  SMSW AX			;Prze³¹czenie procesora w tryb       		
+  SMSW AX			;Przelaczenie procesora w tryb       		
   OR AX,1			;pracy chronionej.		            	
   LMSW AX							           	          		
-  DB 0EAH			;Skok odleg³y do etykiety 	           		
+  DB 0EAH			;Skok odlegly do etykiety 	           		
   DW OFFSET CONTINUE		;continue oraz segmentu		
-  DW 10H			;okreœlonego selektorem 10h (segment programu).         		
+  DW 10H			;okreslonego selektorem 10h (segment programu).         		
   CONTINUE:
-  MOV AX,08			;Za³adowanie selektora 	           		
+  MOV AX,08			;Zaladowanie selektora 	           		
   MOV DS,AX			;segmentu danych.                             		 
-  MOV AX,18H			;Za³adowanie selektora	      	     	
+  MOV AX,18H			;Zaladowanie selektora	      	     	
   MOV SS,AX			;segmentu stosu.		           		
 ENDM
 
 POWROT_DO_RM MACRO WYLACZYC_A20,PRZYWROCIC_IDTR	
   RETURN:MOV AX,DANE		;Procesor pracuje w trybie Real.     	
-  MOV DS,AX			;Inicjalizacja rejestrów segmentowych.	           	
+  MOV DS,AX			;Inicjalizacja rejestrow segmentowych.	           	
   MOV AX,STK							           	
   MOV SS,AX
   IF PRZYWROCIC_IDTR EQ 1
@@ -199,7 +199,7 @@ POWROT_DO_RM MACRO WYLACZYC_A20,PRZYWROCIC_IDTR
   IF WYLACZYC_A20 EQ 1
     A20_OFF
   ENDIF
-  STI				;Odblokowanie przerwañ.	          	
+  STI				;Odblokowanie przerwan.	          	
   MOV AH,9			;Wydruk tekstu zapisane w zmiennej INFO. 	          	
   MOV DX,OFFSET INFO						           	
   INT 21H									
@@ -237,7 +237,7 @@ MIEKI_POWROT_RM MACRO
 ENDM
 
 INICJACJA_TSS0 MACRO
-;Okreœlenie adresu liniowego segmentu stanu zadania TSS_0 i zapis do
+;Okreslenie adresu liniowego segmentu stanu zadania TSS_0 i zapis do
 ;deskryptora GDT_TSS_0 w tablicy GDT
   XOR EAX,EAX                						
   MOV AX,OFFSET TSS_0        						
@@ -254,7 +254,7 @@ INICJACJA_TSS0 MACRO
 ENDM
 
 INICJACJA_TSS2 MACRO WARTOSC_EFLAGS
-;Okreœlenie adresu liniowego segmentu stanu zadania TSS_2
+;Okreslenie adresu liniowego segmentu stanu zadania TSS_2
   XOR EAX,EAX                							
   MOV AX,OFFSET TSS_2        						
   ADD EAX,EBP                							
@@ -262,7 +262,7 @@ INICJACJA_TSS2 MACRO WARTOSC_EFLAGS
   MOV [BX].BASE_1,AX         						
   ROL EAX,16                 							
   MOV [BX].BASE_M,AL   
-;Inicjacja pól segmentu stanu zadania procesu przygotowywanego do uruchomienia w trybie wirtualnym 8086
+;Inicjacja pol segmentu stanu zadania procesu przygotowywanego do uruchomienia w trybie wirtualnym 8086
   MOV AX, KOD_REAL                 					
   MOV WORD PTR TSS_2+4CH, AX	;Selektor segmentu programu (cs)    	 
   MOV WORD PTR TSS_2+20H, 0  	;Offset w segmencie progr.   	 
@@ -271,12 +271,12 @@ INICJACJA_TSS2 MACRO WARTOSC_EFLAGS
   MOV DWORD PTR TSS_2+38H, 256 	;Offset w segmencie stosu.      
   MOV WORD PTR TSS_2+8,64		;Selektor segmentu stosu 0 (ss).       
   MOV DWORD PTR TSS_2+4, 255	;Offset w segmencie stosu 0.            	
-;Wartoœæ rejestru EFLAGS:
+;Wartosc rejestru EFLAGS:
   MOV DWORD PTR TSS_2+36, WARTOSC_EFLAGS     
 ENDM
 
 INICJACJA_DESKR_PRZERWAN MACRO
-;Okreœlenie adresu liniowego segmentu zawieraj¹cego procedury obs³ugi wyj¹tków:
+;Okreslenie adresu liniowego segmentu zawierajacego procedury obslugi wyjatkow:
   XOR EAX,EAX
   MOV AX,PRZERWANIA               						       
   SHL EAX, 4                     						
@@ -284,7 +284,7 @@ INICJACJA_DESKR_PRZERWAN MACRO
   MOV [BX].BASE_1,AX            							
   ROL EAX,16                    							
   MOV [BX].BASE_M,AL  
-;Za³adowanie idtr
+;Zaladowanie idtr
   MOV WORD PTR PDESKR,IDT_SIZE-1 	
   XOR EAX,EAX                        		
   MOV AX,OFFSET IDT                  		
@@ -295,48 +295,48 @@ INICJACJA_DESKR_PRZERWAN MACRO
 ENDM
 
 KONTROLER_PRZERWAN_PM MACRO MASKA
-;PROGRAMOWANIE KONTROLERA PRZERWAÑ
-  MOV DX,20H			;Inicjacja pracy uk³adu  		
+;PROGRAMOWANIE KONTROLERA PRZERWAN
+  MOV DX,20H			;Inicjacja pracy ukladu  		
   MOV AL,11H			;icw1=11h       			
   OUT DX,AL                						
   INC DX                   						
-  MOV AL,20H			;icw2=20h (offset wektora przerwañ)
+  MOV AL,20H			;icw2=20h (offset wektora przerwan)
   OUT DX,AL                						
-  MOV AL,4			;icw3=04h (uk³ad master)		
+  MOV AL,4			;icw3=04h (uklad master)		
   OUT DX,AL                 						
   MOV AL,1			;icw4=01h (tryb 8086/88)		
   OUT DX,AL               							
-  MOV AL, MASKA			;ocw1=0fdh (maska przerwañ - master) 
+  MOV AL, MASKA			;ocw1=0fdh (maska przerwan - master) 
   OUT DX,AL                       					
-  MOV DX,0A1H			;Maska przerwañ – slave		
+  MOV DX,0A1H			;Maska przerwan  slave		
   MOV AL,0FFH              						
   OUT DX,AL                						
 ENDM
 
 KONTROLER_PRZERWAN_RM MACRO
-  MOV DX,20H			;Inicjacja pracy uk³adu 		
+  MOV DX,20H			;Inicjacja pracy ukladu 		
   MOV AL,11H			;icw1=11h               			
   OUT DX,AL                    			
   INC DX                       			
-  MOV AL,8H			;icw2=20h (offset wektora przerwañ)
+  MOV AL,8H			;icw2=20h (offset wektora przerwan)
   OUT DX,AL                    			
-  MOV AL,4			;icw3=04h (uk³ad master) 		
+  MOV AL,4			;icw3=04h (uklad master) 		
   OUT DX,AL                   			
   MOV AL,1			;icw4=01h (tryb 8086/88) 		
   OUT DX,AL                   		
-  MOV AL,00H			;ocw1=0fdh (maska przerwañ - master) 
+  MOV AL,00H			;ocw1=0fdh (maska przerwan - master) 
   OUT DX,AL                		
-  MOV DX,0A1H			;Maska przerwañ - slave 		
+  MOV DX,0A1H			;Maska przerwan - slave 		
   MOV AL,0FFH                    	
   OUT DX,AL                        	
 ENDM
 
 PM_WYPISZ_TEKST_I_DL MACRO
 LOCAL WYPISZ_TEKST_, NAPOTKANY_KONIEC_TEKSTU
-;Za³adowanie rejestru ES selektorem segmentu pamiêci ekranu:
+;Zaladowanie rejestru ES selektorem segmentu pamieci ekranu:
   MOV AX, 20H                            
   MOV ES, AX                                              		
-;Poni¿sza pêtla wyprowadza na ekran kolejne znaki ci¹gu tekstowego a¿ do napotkania bajtu zerowego:
+;Ponizsza petla wyprowadza na ekran kolejne znaki ciagu tekstowego az do napotkania bajtu zerowego:
   WYPISZ_TEKST_:
     MOV AL, [DS:BX]                                			
     CMP AL, 0                                      			
@@ -347,7 +347,7 @@ LOCAL WYPISZ_TEKST_, NAPOTKANY_KONIEC_TEKSTU
     INC BX                                         			
     JMP WYPISZ_TEKST_                                 			
   NAPOTKANY_KONIEC_TEKSTU:
-;Dodatkowo po wyœwietleniu ci¹gu znaków wyœwietlany jest znak zawarty w rejestrze DL:
+;Dodatkowo po wyswietleniu ciagu znakow wyswietlany jest znak zawarty w rejestrze DL:
     MOV [ES:DI], DL       	
 ENDM
 
